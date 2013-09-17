@@ -1,6 +1,6 @@
 Name:           python-troveclient
 Version:        0.1.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Client library for OpenStack DBaaS API
 
 License:        ASL 2.0
@@ -10,7 +10,12 @@ BuildArch:      noarch
  
 BuildRequires:  python2-devel
 BuildRequires:  python-pbr >= 0.5.20
-BuildRequires:  python-sphinx
+%if 0%{?rhel} == 6
+BuildRequires:  python-sphinx10
+%else 
+BuildRequires: python-sphinx
+%endif
+
 BuildRequires:  python-setuptools
 
 # required for tests
@@ -43,7 +48,12 @@ sed -i '1d' troveclient/cli.py
 sed -i '1d' troveclient/mcli.py
 
 # generate html docs 
+%if 0%{?rhel} == 6
+sphinx-1.0-build docs/source html
+%else
 sphinx-build docs/source html
+%endif
+
 # remove the sphinx-build leftovers
 rm -rf html/.{doctrees,buildinfo}
 
@@ -52,11 +62,19 @@ rm -rf html/.{doctrees,buildinfo}
 rm -rf {test-,}requirements.txt tools/{pip,test}-requires
 
 %build
+%if 0%{?rhel} == 6
+%{__python} setup.py build
+%else
 %{__python2} setup.py build
+%endif
 
 
 %install
+%if 0%{?rhel} == 6
+%{__python} setup.py install --skip-build --root %{buildroot}
+%else
 %{__python2} setup.py install --skip-build --root %{buildroot}
+%endif
 
 # currently disabling tests
 # see buildrequires
@@ -66,12 +84,20 @@ rm -rf {test-,}requirements.txt tools/{pip,test}-requires
 
 %files
 %doc html README.rst LICENSE
+%if 0%{?rhel} == 6
+%{python_sitelib}/python_troveclient-%{version}-py?.?.egg-info
+%{python_sitelib}/troveclient
+%else
 %{python2_sitelib}/python_troveclient-%{version}-py?.?.egg-info
 %{python2_sitelib}/troveclient
+%endif
 %{_bindir}/trove-cli
 %{_bindir}/trove-mgmt-cli
 
 %changelog
+* Tue Sep 17 2013 Matthias Runge <mrunge@redhat.com> - 0.1.4-3
+- also build on EPEL6
+
 * Thu Sep 12 2013 Matthias Runge <mrunge@redhat.com> - 0.1.4-2
 - change {__python} to {__python2}
 
