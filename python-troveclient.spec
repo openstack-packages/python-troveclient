@@ -1,6 +1,6 @@
 Name:           python-troveclient
-Version:        0.1.4
-Release:        3%{?dist}
+Version:        1.0.3
+Release:        1%{?dist}
 Summary:        Client library for OpenStack DBaaS API
 
 License:        ASL 2.0
@@ -42,10 +42,6 @@ implements 100% (or less ;) ) of the Trove API.
 %setup -q -n %{name}-%{version}
 # Remove bundled egg-info
 rm -rf %{name}.egg-info
-
-# strip /usr/bin/env from script
-sed -i '1d' troveclient/cli.py
-sed -i '1d' troveclient/mcli.py
 
 # generate html docs 
 %if 0%{?rhel} == 6
@@ -91,10 +87,11 @@ rm -rf {test-,}requirements.txt tools/{pip,test}-requires
 %{python2_sitelib}/python_troveclient-%{version}-py?.?.egg-info
 %{python2_sitelib}/troveclient
 %endif
-%{_bindir}/trove-cli
-%{_bindir}/trove-mgmt-cli
-
+%{_bindir}/trove
 %changelog
+* Fri Dec 06 2013 Matthias Runge <mrunge@redhat.com> - 1.0.3-1
+- upgrade to 1.0.3
+
 * Tue Sep 17 2013 Matthias Runge <mrunge@redhat.com> - 0.1.4-3
 - also build on EPEL6
 
