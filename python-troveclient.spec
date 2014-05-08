@@ -1,11 +1,12 @@
 Name:           python-troveclient
 Version:        1.0.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Client library for OpenStack DBaaS API
 
 License:        ASL 2.0
 URL:            http://www.openstack.org/
 Source0:        https://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
+Patch0:         python-troveclient-remove-pbr-dep.patch
 BuildArch:      noarch
  
 BuildRequires:  python2-devel
@@ -42,6 +43,10 @@ implements 100% (or less ;) ) of the Trove API.
 %setup -q -n %{name}-%{version}
 # Remove bundled egg-info
 rm -rf %{name}.egg-info
+
+# remove pbr runtime dependency
+%patch0 
+sed -i s/RPMVERSION/%{version}/ troveclient/__init__.py
 
 # generate html docs 
 %if 0%{?rhel} == 6
@@ -88,7 +93,11 @@ rm -rf {test-,}requirements.txt tools/{pip,test}-requires
 %{python2_sitelib}/troveclient
 %endif
 %{_bindir}/trove
+
 %changelog
+* Thu May 08 2014 Matthias Runge <mrunge@redhat.com> - 1.0.3-2
+- remove runtime dep to pbr
+
 * Fri Dec 06 2013 Matthias Runge <mrunge@redhat.com> - 1.0.3-1
 - upgrade to 1.0.3
 
