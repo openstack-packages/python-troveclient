@@ -1,23 +1,31 @@
 Name:           python-troveclient
-Version:        1.0.3
-Release:        3%{?dist}
+Version:        1.0.5
+Release:        1%{?dist}
 Summary:        Client library for OpenStack DBaaS API
 
 License:        ASL 2.0
 URL:            http://www.openstack.org/
 Source0:        https://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
-Patch0:         python-troveclient-remove-pbr-dep.patch
+
+#
+# patches_base=1.0.5
+#
+Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
+
 BuildArch:      noarch
  
 BuildRequires:  python2-devel
-BuildRequires:  python-pbr >= 0.5.20
-%if 0%{?rhel} == 6
-BuildRequires:  python-sphinx10
-%else 
-BuildRequires: python-sphinx
-%endif
-
 BuildRequires:  python-setuptools
+BuildRequires:  python-sphinx
+BuildRequires:  python-requests
+BuildRequires:  python-pbr
+
+Requires:       python-argparse
+Requires:       python-prettytable
+Requires:       python-requests
+Requires:       python-setuptools
+Requires:       python-simplejson
+Requires:       python-six
 
 # required for tests
 # tests currently disabled due missing deps
@@ -41,26 +49,25 @@ implements 100% (or less ;) ) of the Trove API.
 
 %prep
 %setup -q -n %{name}-%{version}
+
+%patch0001 -p1
+
+# We provide version like this in order to remove runtime dep on pbr
+sed -i s/REDHATTROVECLIENTVERSION/%{version}/ troveclient/__init__.py
+
 # Remove bundled egg-info
 rm -rf %{name}.egg-info
 
-# remove pbr runtime dependency
-%patch0 
-sed -i s/RPMVERSION/%{version}/ troveclient/__init__.py
+# Let RPM handle the requirements
+rm -f {test-,}requirements.txt
 
-# generate html docs 
-%if 0%{?rhel} == 6
-sphinx-1.0-build docs/source html
-%else
-sphinx-build docs/source html
-%endif
+# Generate html docs
+#export PYTHONPATH="$( pwd ):$PYTHONPATH"
+sphinx-build -b html doc/source html
 
-# remove the sphinx-build leftovers
+# Remove the sphinx-build leftovers
 rm -rf html/.{doctrees,buildinfo}
 
-# Remove the requirements file so that pbr hooks don't add it
-# to distutils requires_dist config
-rm -rf {test-,}requirements.txt tools/{pip,test}-requires
 
 %build
 %if 0%{?rhel} == 6
@@ -95,6 +102,12 @@ rm -rf {test-,}requirements.txt tools/{pip,test}-requires
 %{_bindir}/trove
 
 %changelog
+* Mon Jun 16 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.0.5-1
+- Update to upstream 1.0.5
+- Add missing dependencies
+- Align .spec file with other *client packages
+- Remove now unneeded python-spinx10 conditionals
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
