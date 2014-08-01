@@ -48,7 +48,7 @@ troveclient module), and a command-line script (trove). Each
 implements 100% (or less ;) ) of the Trove API.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{upstream_version}
 
 %patch0001 -p1
 
@@ -93,10 +93,10 @@ rm -rf html/.{doctrees,buildinfo}
 %files
 %doc html README.rst LICENSE
 %if 0%{?rhel} == 6
-%{python_sitelib}/python_troveclient-%{version}-py?.?.egg-info
+%{python_sitelib}/python_troveclient-*.egg-info
 %{python_sitelib}/troveclient
 %else
-%{python2_sitelib}/python_troveclient-%{version}-py?.?.egg-info
+%{python2_sitelib}/python_troveclient-*.egg-info
 %{python2_sitelib}/troveclient
 %endif
 %{_bindir}/trove
