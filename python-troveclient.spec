@@ -19,6 +19,7 @@ BuildRequires:  python-setuptools
 BuildRequires:  python-sphinx
 BuildRequires:  python-requests
 BuildRequires:  python-pbr
+BuildRequires:  python-oslo-sphinx
 
 Requires:       python-argparse
 Requires:       python-prettytable
@@ -102,6 +103,9 @@ rm -rf html/.{doctrees,buildinfo}
 %{_bindir}/trove
 
 %changelog
+* Thu Oct 09 2014 Dan Prince <dprince@redhat.com> XXX
+- Add build dependency for python-oslo-sphinx
+
 * Mon Jun 16 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.0.5-1
 - Update to upstream 1.0.5
 - Add missing dependencies
