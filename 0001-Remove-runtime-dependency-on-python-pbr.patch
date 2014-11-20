@@ -1,4 +1,4 @@
-From 938b8c9f0cdef16b4927b4e7d5fad73862970f25 Mon Sep 17 00:00:00 2001
+From 6d3b78207a45077e496bed4f7b43b93d41470480 Mon Sep 17 00:00:00 2001
 From: Jakub Ruzicka <jruzicka@redhat.com>
 Date: Mon, 16 Jun 2014 16:04:11 +0200
 Subject: [PATCH] Remove runtime dependency on python-pbr
@@ -36,6 +36,3 @@ index a470d7b..65c0bac 100644
 -except AttributeError:
 -    __version__ = None
 +__version__ = "REDHATTROVECLIENTVERSION"
--- 
-1.9.3
-

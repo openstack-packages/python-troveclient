@@ -1,15 +1,12 @@
 Name:           python-troveclient
-Version:        1.0.5
-Release:        1%{?dist}
+Version:        XXX
+Release:        XXX{?dist}
 Summary:        Client library for OpenStack DBaaS API
 
 License:        ASL 2.0
 URL:            http://www.openstack.org/
 Source0:        https://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
-#
-# patches_base=1.0.5
-#
 Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
 
 BuildArch:      noarch
@@ -103,6 +100,9 @@ rm -rf html/.{doctrees,buildinfo}
 %{_bindir}/trove
 
 %changelog
+* Mon Oct 13 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.0.7-1
+- Update to upstream 1.0.7
+
 * Thu Oct 09 2014 Dan Prince <dprince@redhat.com> XXX
 - Add build dependency for python-oslo-sphinx
 
