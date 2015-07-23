@@ -1,16 +1,14 @@
 Name:           python-troveclient
 Version:        XXX
-Release:        XXX{?dist}
+Release:        XXX
 Summary:        Client library for OpenStack DBaaS API
 
 License:        ASL 2.0
 URL:            http://www.openstack.org/
 Source0:        https://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 
-Patch0001: 0001-Remove-runtime-dependency-on-python-pbr.patch
-
 BuildArch:      noarch
- 
+
 BuildRequires:  python2-devel
 BuildRequires:  python-setuptools
 BuildRequires:  python-sphinx
@@ -19,6 +17,9 @@ BuildRequires:  python-pbr
 BuildRequires:  python-oslo-sphinx
 
 Requires:       python-argparse
+Requires:       python-keystoneclient
+Requires:       python-oslo-utils
+Requires:       python-pbr
 Requires:       python-prettytable
 Requires:       python-requests
 Requires:       python-setuptools
@@ -47,11 +48,6 @@ implements 100% (or less ;) ) of the Trove API.
 
 %prep
 %setup -q -n %{name}-%{upstream_version}
-
-%patch0001 -p1
-
-# We provide version like this in order to remove runtime dep on pbr
-sed -i s/REDHATTROVECLIENTVERSION/%{version}/ troveclient/__init__.py
 
 # Remove bundled egg-info
 rm -rf %{name}.egg-info
@@ -100,32 +96,3 @@ rm -rf html/.{doctrees,buildinfo}
 %{_bindir}/trove
 
 %changelog
-* Mon Oct 13 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.0.7-1
-- Update to upstream 1.0.7
-
-* Thu Oct 09 2014 Dan Prince <dprince@redhat.com> XXX
-- Add build dependency for python-oslo-sphinx
-
-* Mon Jun 16 2014 Jakub Ruzicka <jruzicka@redhat.com> 1.0.5-1
-- Update to upstream 1.0.5
-- Add missing dependencies
-- Align .spec file with other *client packages
-- Remove now unneeded python-spinx10 conditionals
-
-* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.3-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
-
-* Thu May 08 2014 Matthias Runge <mrunge@redhat.com> - 1.0.3-2
-- remove runtime dep to pbr
-
-* Fri Dec 06 2013 Matthias Runge <mrunge@redhat.com> - 1.0.3-1
-- upgrade to 1.0.3
-
-* Tue Sep 17 2013 Matthias Runge <mrunge@redhat.com> - 0.1.4-3
-- also build on EPEL6
-
-* Thu Sep 12 2013 Matthias Runge <mrunge@redhat.com> - 0.1.4-2
-- change {__python} to {__python2}
-
-* Thu Sep 12 2013 Matthias Runge <mrunge@redhat.com> - 0.1.4-1
-- Initial package.
