@@ -1,11 +1,12 @@
+%{!?upstream_version: %global upstream_version %{version}%{?milestone}}
 Name:           python-troveclient
-Version:        XXX
-Release:        XXX
+Version:        2.1.1
+Release:        1%{?dist}
 Summary:        Client library for OpenStack DBaaS API
 
 License:        ASL 2.0
 URL:            http://www.openstack.org/
-Source0:        https://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}%{?milestone}.tar.gz
 
 BuildArch:      noarch
 
@@ -96,3 +97,5 @@ rm -rf html/.{doctrees,buildinfo}
 %{_bindir}/trove
 
 %changelog
+* Wed Mar 23 2016 RDO <rdo-list@redhat.com> 2.1.1-0.1
+-  Rebuild for Mitaka 2.1.1
